@@ -132,56 +132,56 @@ server {
 让supervisor管理uwsgi，可以在uwsgi发生意外的情况下，会自动的重启。
 1. `supervisor`的安装：在系统级别的python环境下`pip install supervisor`。
 2. 在项目的根目录下创建一个文件叫做`zlkt_supervisor.conf`。内容如下：
-```python
-# supervisor的程序名字
-[program:mysite]
-# supervisor执行的命令
-command=uwsgi --ini zlkt_uwsgi.ini
-# 项目的目录
-directory = /srv/zhiliaoketang 
-# 开始的时候等待多少秒
-startsecs=0
-# 停止的时候等待多少秒
-stopwaitsecs=0  
-# 自动开始
-autostart=true
-# 程序挂了后自动重启
-autorestart=true
-# 输出的log文件
-stdout_logfile=/srv/zhiliaoketang/log/supervisord.log
-# 输出的错误文件
-stderr_logfile=/srv/zhiliaoketang/log/supervisord.err
+   ```python
+   # supervisor的程序名字
+   [program:mysite]
+   # supervisor执行的命令
+   command=uwsgi --ini zlkt_uwsgi.ini
+   # 项目的目录
+   directory = /srv/zhiliaoketang 
+   # 开始的时候等待多少秒
+   startsecs=0
+   # 停止的时候等待多少秒
+   stopwaitsecs=0  
+   # 自动开始
+   autostart=true
+   # 程序挂了后自动重启
+   autorestart=true
+   # 输出的log文件
+   stdout_logfile=/srv/zhiliaoketang/log/supervisord.log
+   # 输出的错误文件
+   stderr_logfile=/srv/zhiliaoketang/log/supervisord.err
 
-[supervisord]
-# log的级别
-loglevel=info
+   [supervisord]
+   # log的级别
+   loglevel=info
 
-# 使用supervisorctl的配置
-[supervisorctl]
-# 使用supervisorctl登录的地址和端口号
-serverurl = http://127.0.0.1:9001
+   # 使用supervisorctl的配置
+   [supervisorctl]
+   # 使用supervisorctl登录的地址和端口号
+   serverurl = http://127.0.0.1:9001
 
-# 登录supervisorctl的用户名和密码
-username = admin
-password = 123
+   # 登录supervisorctl的用户名和密码
+   username = admin
+   password = 123
 
-[inet_http_server]
-# supervisor的服务器
-port = :9001
-# 用户名和密码
-username = admin
-password = 123
+   [inet_http_server]
+   # supervisor的服务器
+   port = :9001
+   # 用户名和密码
+   username = admin
+   password = 123
 
-[rpcinterface:supervisor]
-supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
-```
+   [rpcinterface:supervisor]
+   supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+   ```
 然后使用命令`supervisord -c zlkt_supervisor.conf`运行就可以了。
 以后如果想要启动`uwsgi`，就可以通过命令`supervisorctl -c supervisor.conf`进入到管理控制台，然后可以执行相关的命令进行管理：
-    * status                # 查看状态
-    * start program_name    #启动程序
-    * restart program_name  #重新启动程序
-    * stop program_name     # 关闭程序
-    * reload                # 重新加载配置文件
-    * quit                  # 退出控制台
+ * status                # 查看状态
+ * start program_name    #启动程序
+ * restart program_name  #重新启动程序
+ * stop program_name     # 关闭程序
+ * reload                # 重新加载配置文件
+ * quit                  # 退出控制台
 
 
