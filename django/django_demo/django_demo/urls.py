@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.index, name="index"),
     path("article/", include("blog.urls")),
+    path("tinymce/",include("tinymce.urls"))
 ]

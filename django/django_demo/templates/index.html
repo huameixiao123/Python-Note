@@ -2,13 +2,50 @@
 
 {% block content %}
     <ul>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
-        <li><a href="">标题</a></li>
+        {% for article in page.object_list %}
+            <li><a href="#">{{ article.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <ul class="pagination">
+        {% if page.has_previous %}
+            <li><a href="{% url "index" %}?page={{ page.previous_page_number }}">上一页</a></li>
+        {% else %}
+            <li class="disabled"><a href="javascript:void(0);">上一页</a></li>
+        {% endif %}
+        {% if left_has_more %}
+            <li><a href="{% url "index" %}?page=1">1</a></li>
+            <li><a href="javascript:void (0);">...</a></li>
+        {% endif %}
+
+{#        左边的页码#}
+        {% for left_page in left_pages %}
+            <li><a href="{% url "index" %}?page={{ left_page }}">{{ left_page }}</a></li>
+        {% endfor %}
+
+{#        中间的页码#}
+        <li class="active"><a href="javascript:void(0);">{{ page.number }}</a></li>
+{#        右边的页码#}
+        {% for right_page in right_pages %}
+            <li><a href="{% url "index" %}?page={{ right_page }}">{{ right_page }}</a></li>
+        {% endfor %}
+
+        {% if right_has_more %}
+            <li><a href="javascript:void (0);">...</a></li>
+            <li><a href="{% url "index" %}?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+        {% endif %}
+{#        {% for num in paginator.page_range %}#}
+{#            {% if page.number == num %}#}
+{#                <li class="active"><a href="{% url "index" %}?page={{ num }}">{{ num }}</a></li>#}
+{#            {% else %}#}
+{#                <li><a href="{% url "index" %}?page={{ num }}">{{ num }}</a></li>#}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+
+        {% if page.has_next %}
+            <li><a href="{% url "index" %}?page={{ page.next_page_number }}">下一页</a></li>
+        {% else %}
+            <li class="disabled"><a href="javascript:void(0);">下一页</a></li>
+        {% endif %}
     </ul>
 {% endblock %}
