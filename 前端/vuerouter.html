@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>vuerouter</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="nav">
+            <router-link to="/">首页</router-link>
+            <router-link to="/find">发现</router-link>
+            <router-link to="/myfriends">我的朋友</router-link>
+        </div>
+        <div class="container">
+            <router-view></router-view>
+        </div>
+    </div>
+    <script>
+        var index = Vue.extend({
+            template: "<h1>首页</h1>"
+        })
+        var find = Vue.extend({
+            template: "<h1>发现</h1>"
+        })
+        var myfriends = Vue.extend({
+            template: "<h1>我的朋友</h1>"
+        })
+        const router = new VueRouter({
+            routes: [
+                { path: "/", component: index },
+                { path: "/find", component: find },
+                { path: "/myfriends", component: myfriends },
+            ]
+        })
+        new Vue({
+            el: "#app",
+            router
+        })
+    </script>
+</body>
+
+</html>
+
+<!-- 笔记
+Vuerouter 是Vue的一个做路由的组件
+基本使用
+首先要引入VueRouter的包 可以使用cdn，也可以使用node安装
+
+在script标签中定义一个VueRouter的对象，对象接收一个routes的对象做为参数来实例化VueRouter
+routes 是一个数组，数组里面是一个路由匹配的对象`{path:"/index",component:index}`
+定义好了路由，然后就是写对应的组件，可以在当前页面使用`Vue.extend({template:"<h1>首页</h1>>")`
+也可以使用import 来导入组件
+
+将定义好的VueRouter 的对象放在Vue对象中，可以有2种方式，
+1. new Vue({
+    router:router
+})
+2. new Vue({
+    router
+})
+
+在页面中使用`<router-link to=""></router-link>`来定义a标签的跳转来实现页面的跳转
+要将组件的模版渲染到dom中，可以使用`<router-view></router-view>`标签
+
+那么这样就可以实现通过url来进行页面的跳转 -->
