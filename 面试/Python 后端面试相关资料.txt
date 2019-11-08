@@ -1,0 +1,614 @@
+Python 后端面试相关资料
+
+1. Python语言特性
+
+	动态强类型 
+	
+	动态还是静态是通过编译期还是运行期间确定的类型
+	
+	强类型指的是不会发生隐式类型转换 
+	
+2. 优缺点
+
+	优点
+		胶水语言 轮子多 应用广泛
+		语言灵活 生产力高
+	缺点
+		性能问题 代码维护问题 Python23兼容问题
+		
+3. 什么是鸭子类型
+	
+	关注对象的行为 而不是类型
+	
+	比如 file StringIO socket 都有read write 方法 都可以叫做文件对象
+	
+	定义了__iter__ 方法 的对象都可以使用for 循环来迭代
+	
+	判断对象的类型 
+		type()
+		isinstains(obj,class)
+
+4. 什么是猴子补丁 
+
+	运行时属性替换 
+	
+	常用在gevent库 from gevent import monkey, monkey.patch_all() 
+	
+5. 什么是自省
+	运行时获取对象的类型
+	判断对象的类型 
+		type()
+		isinstance(obj,class)
+		id()
+	is 判断对象是不是同一个对象
+	== 判断对象的值是否相等
+6. Python23兼容问题
+
+	python3 改进 
+		print() 由关键字改成函数 
+		除法 
+		unicode 
+		序列拆包
+		限定关键字参数
+		保留异常栈信息
+		一切对象返回迭代器
+		
+		yield from 链接子生成器 
+		asyncio async await 原生协程支持异步编程 
+		新的内置库 enum mock ipaddress concurrent.futures asyncio		
+		
+		six 
+		2to3 等工具 
+		__future__
+		
+7. Python 函数
+
+	可变类型作为参数
+		会在函数内部改变参数的值
+	不可变类型作为参数
+		不会影响函数参数的值 
+	默认参数只计算一次 
+	*args **kwargs
+	
+	可变对象 
+		list set dict
+	不可变对象
+		str bool int tuple frozenset float
+		
+8. Python 异常机制
+
+	Base Exception 
+	SystemExit
+	KeyboardInterrupt
+	GeneratorExit
+	StopIteration
+	Exception
+	
+	try:
+		pass
+	exception (Exception1，Exception2...) as e:
+		pass
+	else:
+		pass
+	finally:
+		pass
+	
+	主动抛出异常
+		raise
+	
+	自定义异常
+	
+		继承Exception
+	
+9. GIL锁 
+	
+	同一时刻只有1个线程在运行
+	CPU密集型 
+	IO密集型
+	单字节码是线程安全的 也就是原子操作
+	
+	加锁 
+	
+	lock = threading.lock()
+	
+	with lock:
+		# do something
+		
+	程序性能 
+		profile 
+		cprofile 
+
+10. 后端性能优化 
+
+	数据结构和算法
+	数据库层的优化
+		索引 消除慢查询 批量操作减少IO Nosql数据库
+	网络IO 批量操作 减少IO
+	缓存 redis memcached
+	异步库 asyncio celery 
+	并发 gevent 多线程
+	
+11. 生成器和协程
+
+	什么是生成器
+		生成值的函数
+		函数返回通yield
+	
+	什么是基于生成器的协程
+		def coro():
+			hello = yield "hello"  # yield 关键字在=的右边 可以被send值 hello就收
+			yield hello
+
+		c = coro()
+		print(type(c))
+		print(next(c))  # 输出hello 函数暂停
+		print(c.send("world"))  # 发送值 hello接收
+		print(next(c))  # 输出 world
+		print(next(c))  # 没有值了 抛出停止迭代异常
+
+		
+		
+		from functools import wraps
+		def init(func):  # 初始化
+			def wrapper(*args, **kwargs):
+				g = func(*args, **kwargs)
+				next(g)
+				return g
+			return wrapper
+
+
+		@init
+		def eater(name):
+			print('%s 准备开始吃饭啦' % name)
+			food_list = []
+			while True:
+				food = yield food_list
+				print('%s 吃了 %s' % (name, food))
+				food_list.append(food)
+
+
+		g = eater('egon')
+		g.send('蒸羊羔')
+		g.send('蒸羊羔')
+		g.send('蒸羊羔')
+		g.send('蒸羊羔')
+		g.send('蒸羊羔')
+		g.send('蒸羊羔')
+
+		
+		
+		
+	
+		import threading
+		import asyncio
+
+		#①添加装饰器之后函数变为协程
+		@asyncio.coroutine
+		def hello():
+			print('Hello world! (tid: %s)' % threading.currentThread().ident)
+			yield from asyncio.sleep(3) # 模拟异步执行耗时任务。yield from从后面的可迭代对象中返回东西
+			print('Hello again! (tid:%s)' % threading.currentThread().ident)
+			yield from asyncio.sleep(2)
+			print('Hello again2! (tid:%s)' % threading.currentThread().ident)
+
+
+		@asyncio.coroutine
+		def bye():
+			print('bye (tid:%s)' % threading.currentThread().ident)
+			yield from asyncio.sleep(1)
+			print('bye again! (tid:%s)' % threading.currentThread().ident)
+			yield from asyncio.sleep(1)
+			print('bye again2! (tid:%s)' % threading.currentThread().ident)
+
+		 
+
+		#②下面这些与async异步模式协程一致。
+
+
+		loop = asyncio.get_event_loop()
+
+		tasks = [hello(), bye()]
+		loop.run_until_complete(asyncio.wait(tasks))
+		loop.close()
+
+12. 单元测试 
+
+	常用的库
+		nose pytest
+		mock 模块用来模拟替换网络请求 
+		coverage 覆盖率
+	
+	def test():
+		assert func(*args,**kwargs) == value
+		....
+
+		三类参数 进行测试 
+		正常值功能测试
+		边界值 测试
+		异常值 测试
+		
+	pytest xxx.py
+	
+13. python 深拷贝 浅拷贝
+
+	copy.copy()
+	
+	copy.deepcopy()
+	
+	
+14. Python 内置数据结构 算法
+
+	collections
+		namedtuple
+		deque
+		Counter
+		OrderedDict
+		DefaultDict
+		
+		
+	数据结构/算法	语言内置			内置库
+	线性结构  		list tuple      	array collections.namedtuple
+	链式结构							collections.deque 
+	字典结构  		dict				collections.Counter/collections.OrderedDict
+	结合结构  		set/frozenset 	
+	排序算法  		sorted
+	二分法 	  							bisect
+	堆算法								heapq
+	缓存算法 							functools.lru_cache(Least Recent Used,python3)
+										缓存剔除策略 
+	
+	自己实现LRUcache 
+	
+	hash 扩容和冲突 
+	list 和 tuple的区别 
+	
+15. 算法 
+	
+	排序 
+		冒泡 快排 归并 堆排序 
+	查找
+		线性查找 二分查找
+	
+	手写算法 分析时间和空间复杂度
+	
+16. web后端参考的数据结构 
+
+	链表
+		单链表
+			
+		双链表
+		循环双端列表
+		
+		实现列表的常见操作  插入节点 反转列表 合并多个链表 
+		leetcode 常见题
+		
+	队列 
+		先进先出
+		list
+		deque
+	栈 
+		后进先出
+		
+	二叉树 堆 最大堆 最小堆 
+	
+	使用内置数据结构实现高级数据结构 比如 利用list/deque实现栈 
+	
+	leetcode 剑指offer 的原型题
+	
+....
+
+17. Python 面向对象
+
+		OOP object oriented programming
+		
+		把对象作为基本单元, 把对象抽象成类, 包含成员和方法 
+		
+		封装 集成 多态
+		
+		使用类来实现OOP
+		
+		class Persion:
+
+			def __init__(self, age, name):
+				self._name = name
+				self.__age = age
+
+			def print_name(self):
+				print("名字是:{}".format(self._name))
+	
+		组合与继承
+		
+			优先使用组合 
+			组合是使用其他的类实例作为自己的属性(has-a 关系)
+			子类继承父类的属性和方法(is-a 关系)
+			优先使用组合保持代码简单 使用继承会导致代码膨胀 
+			
+18. 设计模式
+	
+	常用的设计模式(三大类)
+	创建型 
+		工厂模式
+			依据对象的不同类型 创建不同的对象 
+		
+		单例模式
+			class Persion():
+				def __new__(cls, *args, **kwargs):
+					if not hasattr(cls, "_instance"):
+						cls._instance = super().__new__(cls, *args, **kwargs)
+					return cls._instance
+		构造模式
+			将初始化参数解耦到其他对象中
+		
+		...
+	结构型
+		装饰器模式
+			无需使用子类化来扩展功能
+			
+		代理模式 *
+			把一个对象的操作代理到另一个对象 
+		
+		适配器模式 *
+			通过一个间接层适配统一接口
+			
+			class Computer:
+				def __init__(self, name):
+						self.name = name
+
+				def chongdian(self):
+					print("电脑充电")
+
+
+			class Phone:
+				def __init__(self, name):
+						self.name = name
+
+				def chongdian1(self):
+					print("手机充电")
+
+
+			class ShiPeiQi():
+
+				def __init__(self, obj, **methods):
+					self.obj = obj
+					self.__dict__.update(methods)
+
+				def __getattr__(self, attr):
+					return getattr(self.obj, attr)
+
+
+			objs = []
+			c = Computer("联想")
+			objs.append(ShiPeiQi(c, chong=c.chongdian))
+			p = Phone("apple")
+			objs.append(ShiPeiQi(p, chong=p.chongdian1))
+
+			for i in objs:
+				print(i.name, i.chong())
+
+		
+		外观模式
+			简化复杂对象的访问问题
+			
+		享元模式
+			通过对象复用(池)改善资源利用 比如连接池
+		
+		MVC模式
+			解耦展现逻辑和业务逻辑 
+	行为型
+		迭代器模式
+			通过统一的接口来迭代对象
+			__iter__  __next__
+			
+		观察者模式
+			redis 发布订阅模式
+			
+		策略模式 
+			针对不同规模输入 使用不同的策略
+			超市打折 10个order 8折  20个order 5折
+
+19. 函数式编程
+
+		把电脑的运算是做数学上的函数计算 
+		高阶函数 map zip reduce filter
+		无副作用 相同的参数始终产生相同的结果
+		
+		闭包 
+			绑定了外部作用域的函数 
+			即使程序离开外部作用域 如果闭包任然可见绑定变量不会销毁 
+			每次运行外部函数都会重新创建闭包 
+		
+20. linux 常用命令
+
+		pip install tldr
+	
+		文件目录操作
+			chown/chmod/chgrp
+			ls/rm/cp/mv/touch/rename/ln等 
+			locate/find/grep
+			
+			cat/head/tail
+			more/less
+			
+		进程操作
+			ps
+			kill
+			top/htop
+			
+		内存操作
+			free
+			
+		网络操作
+			ifconfig
+			lsof/netstat
+			ssh/scp/tcpdump
+			
+		用户组操作
+			useradd usermod
+			groupadd groupmod
+		
+		crontab 定时任务
+
+21. 多进程 多线程
+
+	进程是对运行时程序的封装，是系统资源调度和分配的最小单元
+	
+	线程是进程的子任务，cpu调度和分配的基本的单元
+	
+	一个进程可以包含多个线程，线程依赖进程存在，共享进程内存
+	
+	
+	什么 是线程安全
+	原子操作是安全的 加锁是安全的
+	写操作
+	
+	线程同步的方式
+		互斥量(锁)
+		信号量 访问统一资源 控制线程的个数
+		事件(信号)
+	
+	进程间的通信 
+		管道
+		信号
+		消息队列
+		
+		共享内存
+		信号量
+		套接字 
+		
+	python中多线程
+		IO密集型
+		threading
+		
+	python中多进程
+		multiprocessing
+		CPU密集型
+	
+22. 操作系统内存管理机制
+
+	分页机制
+	
+	分段机制
+	
+	虚拟内存
+	
+	内存抖动
+	
+		频繁的页调度，进程不断产生缺页中断
+		
+	python 的垃圾回收
+		垃圾回收算法
+		引用计数为主 无法解决循环引用 
+		引入标记清除和分代回收解决引用计数的问题
+		引用计数为主  标记清除和分代回收为辐
+	
+23. http
+	请求
+		状态行 
+		请求头
+		请求体
+	响应
+		响应行
+		响应头 
+		响应体
+	
+	状态码 
+		1xx/2xx/3xx/4xx/5xx
+	
+	HTTP 方法 
+		GET POST PUT DELETE
+		幂等性 多次访问 结果是否一致  
+		安全性 是否会对数据库造成改变
+	HTTP 长连接
+		Connection: keep-alive
+	cookie 和 session 的区别 
+		会话技术
+		cookie   		客户端储存 	储存数据小
+		session			服务器储存	
+		
+24. SOCK编程 IO模型
+
+	TCP socket
+	
+	五种IO模型
+		阻塞IO
+		非阻塞IO
+		异步IO
+		IO多路复用
+			linux seletor/poll/epoll
+			
+		信号驱动IO
+	并发解决：
+		多线程 
+		多进程 
+
+25. 数据库 
+
+	mysql
+	
+		事务
+			数据库并发控制的基本单位
+			ACID 原子性 一致性 隔离性 持久性 
+			事务是很多sql语句的集合
+			事务并发控制 
+				幻读
+				非重复读
+				脏读
+				修改丢失 
+			事务隔离级别 
+				读未提交
+				读已提交
+				可重复读
+				串行化 
+		插入重复
+			使用索引
+			使用队列异步写入
+			使用redis分布式锁
+		乐观锁
+			先修改，在更新的时候发现数据已经变了就回滚 check and set
+		悲观锁
+			先获取锁在进行操作  一锁二查三更新 select for update
+		依据 响应速度 冲突频率 重试代价 来确定使用哪一种
+		
+		数据类型
+			字符串
+				char
+				vachar
+				text
+			数字类型
+				
+			日期时间
+				date
+				datetime
+				timestamp
+		引擎
+			innoDB
+				支持事务 支持外键 支持表锁 行锁 不支持全文检索	
+			myisam
+				不支持事务 不支持外键 支持表锁 支持全文检索
+				
+		
+		索引优化
+			什么是索引
+				数据表中一个或者多个列进行排序的数据结构
+				索引能够大幅度提升检索速度
+				创建和更新索引是花费时间和空间的
+			什么是B-Tree
+				线性查找  一个一个找 太慢
+				二分查找	有序简单 要求有序 插入特别慢 O(n)
+				hash 		查询快 占用空间 不适合大规模数据 
+				二叉查找树	 查询快 插入快 复杂度退化 无法储存大规模数据
+				平衡树		解决bst退化的问题 树是平衡的 节点非常多的时候 依然树很高
+				多路查找树  一个父亲多个孩子节点 节点非常多的时候 依然树不是特别高
+				多路平衡查找树 
+			原理
+			类型 
+				普通索引
+				唯一索引
+				多列索引
+				主键索引
+				全文索引
+				
+			结构
+			慢查询
+		
+	redis

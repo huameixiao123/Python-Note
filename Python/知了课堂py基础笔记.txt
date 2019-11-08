@@ -1,0 +1,491 @@
+python基础知识点：
+
+1. 注释
+	- # 单行注释
+	- """....""" 或者 '''...''' 多行注释
+2. 变量
+	由字母 数字 下划线组成 并且不能以数字开头
+	大小写敏感 
+	驼峰命名 大驼峰UserAge 小驼峰 userAge
+	下划线 user_age
+	不能使用关键字 from class if ...
+	基本数据类型 int float str bool
+	查看数据类型 type()
+	类型转换 
+		int()
+		float()
+		str()
+		bool()
+3. 输入输出函数
+	input 
+	print
+	
+4. 运算符 
+	+ - * /  // % ** == += != 	<=  >=  -= *=  /=  **=  //= 
+5. 分支语句
+	bool 来判断条件的真假
+	if  elif else 
+	is == id  > < != 
+6. 循环
+	for 循环  for else
+	while 循环
+	continue 
+	break
+7. 字符串
+	- \ 代码拼接
+	- str 是unicode  bytes类型是二进制
+	- 字符串拼接的方式
+		- +的形式拼接
+		- 使用字符串格式化的方式
+			- "username %s %s "%("sss","qqq")
+				- %s
+				- %d
+				- %.2f
+			- "username {name}".format(name="sss")
+			- "username {}".format("sss")
+	- 下标操作
+		[2] [-1]
+	- 切片操作
+		[1:3:4] [::] [1:] [:2]
+	- 常用方法
+		- string.find() 
+		- string.index()
+		- len(string)
+		- string.count()
+		- string.replace(raw,new,1)
+		- string.split()
+		- string.startswith()
+		- string.endswitn()
+		- string.lower()
+		- string.upper()
+		- string.strip()	
+		- string.lstrip()	
+		- string.rstrip()	
+		- string.partttion() # 按照给定的字符串进行分割成3个部分的元组
+		- isalnum()  # 判断是否是字母和数字组成
+		- isalpha()  # 判断是否是纯字母的字符串
+		- isdigit()  # 判断是否是纯数字的字符串
+		- isspace()  # 判断是否是一个纯空格的字符串
+		- format()   # 字符串的格式化
+	- 转义字符 
+		- \ 	在代码结尾是续行符
+		- \n 	换行符 
+		- \t	制表符
+		- \'	转义单引号
+		- \"	转义双引号
+		- \\	转移反斜杠
+	- 原生字符串
+		r"zifuchaun"
+	- 编码和解码
+		- encode("utf-8")
+			内存
+		- decode("utf-8")
+			加密 磁盘 传输	
+8. 列表
+	- 定义 
+		数据容器  list() [] 
+	- 指标下标操作 切片操作
+	- 循环列表(for while)
+	- 列表支持 + 操作 
+	- 列表可以储存任意类型的对象
+	- 常用方法
+		- append()  	# 尾部添加 
+		- count()		# 统计元素在列表中出现的次数
+		- extend() 		# 列表追加
+		- index()		# 元素的索引
+		- insert()		# 插入元素到某个位置
+		- pop()			# 删除尾部元素并返回该元素/ 删除索引的元素pop(index)
+		- remove()		# 移除第一匹配的元素
+		- reverse() 	# 逆序操作 在原来的列表基础上进行排序
+		- sort()		# 排序
+		- soertd() 		# 排序函数 不会对原来的值产生修改
+		- del a[22] 	# 删除元素
+		- in 			# 判断元素是不是在列表中
+		- list()		# 将可迭代的对象转化为list
+9. 元组
+	- 元组的定义
+		() 不可变的对象
+		- a = 1,2,3
+		- a = (1,2,3)
+		- tuple(iterable)
+		- a = (1,)
+	- 支持切片操作 支持下标操作
+	- 支持解包操作  username,age = ("ssss",23) 
+	- count()
+	- index()
+	- 存在的意义
+		- 可以当作字典的key来使用
+		- 函数返回多个值 一般采用元组解包来接收
+		- 在一些不希望用户修改值的场景下来采用元组代替列表
+10. 集合
+	- 定义
+		a = set()
+	- 方法
+		- add(self, *args, **kwargs)			是把要传入的元素做为一个整个添加到集合中
+		- clear(self, *args, **kwargs)			清空集合里面的所有元素	
+		- copy(self, *args, **kwargs)			复制集合里面的所有元素 ，返回一个浅复制
+		- difference(self, *args, **kwargs）	求两个集合里面的不同的元素 ，又称差
+		- difference_update(self, *args, **kwargs)  返回删除了 set “集合2”中含有的元素后的 set “集合1” 
+		- discard(self, *args, **kwargs)		如果在 set “集合”中存在元素 x, 则删除 
+		- intersection(self, *args, **kwargs)	求两个集合里面相同的元素，又称并 ，返回只保留含有 set “集合2”中元素的 set “集合1” 
+		- intersection_update(self, *args, **kwargs)	返回只保留含有 set “集合2”中元素的 set “集合1” ，并更新自己
+		- isdisjoint(self, *args, **kwargs)		 判断两个集合是不是不相交，并返回
+		- issubset(self, *args, **kwargs)		 判断集合是不是包含其他集合，等同于a>=b
+		- issuperset(self, *args, **kwargs)		判断集合是不是被其他集合包含，等同于a<=b 
+		- pop(self, *args, **kwargs)			删除并且返回 set “集合”中的一个不确定的元素, 如果为空则引发 KeyError 
+		- remove(self, *args, **kwargs)			从 set “集合”中删除元素 , 如果不存在则引发 KeyError 
+		- symmetric_difference(self, *args, **kwargs) 返回一个新的 set 包含 外面 和 里面 中不重复的元素也就是两个集合不重复的元素 
+		- symmetric_difference_update(self, *args, **kwargs)	返回含有 set “里面”或者 set “外面”中有而不是两者都有的元素的 set “外面” 
+		- union(self, *args, **kwargs)          把两个集合连接起来，又称并 
+		- update(self, *args, **kwargs)  	    可以在集合里面添加多项
+	- 增加和更新
+		set.add()  
+		set.update([])		
+	- 删除
+		set.remove()
+	- frozenset 
+		不可变的集合 
+	- 交并差
+		& | - 
+	- 集合转换
+		se = set(range(4))
+		li = list(se)
+		tu = tuple(se)
+		st = str(se)
+	
+11. 字典
+	- 定义 
+		dict(name="ss",age=12)  {}  
+	- 基本操作
+		- len()
+		- d["xx"]
+		- d["xx"] = "qqq"
+		- del d["key"]
+		- key in d
+		- 增和改
+			赋值
+			setdefault()
+			update()
+		- 删	
+			- pop()：删除指定key的键值对
+			- clear()：清除所有的键值对
+		- 查
+			- keys
+			- values
+			- items
+	- 使用注意事项
+		- 字典的键不能是list类型
+		- list/set/dict 均不可被哈希，int、float、str、tuple：是可以哈希的
+		
+	- 方法
+		- clear(self)	 				删除字典内所有的元素
+		- copy(self)					返回一个字典的浅copy ，俗称赋值
+		- fromkeys(*args,**kwargs)		创建一个新字典，以序列seq中元素做字典的键，val为字典所有键对应的初始值
+		- get(self,k,d=None)	 		返回指定键的值，如果值不在字典中返回default值
+		- items(self)					以列表返回可遍历的(键, 值) 元组数组
+		- keys(self)	 				以列表返回一个字典所有的键
+		- pop(self,k,d=None)	 		删除字典给定键 key 所对应的值，返回值为被删除的值。key值必须给出。 否则，返回default值
+		- popitem(self)	 				随机返回并删除字典中的一对键和值
+		- setdefault(self,k,d=None)	 	和get()类似, 但如果键不存在于字典中，将会添加键并将值设为default
+		- update(self,E=None,**F)	 	把self的东西更新到外面字典
+		- values(self)	 				以列表返回字典中的所有值
+12.	函数
+	将重复性的代码封装成一个函数 以后使用的时候直接调用 
+	
+	def func(*args,**kwargs):
+		return args,kwargs
+	参数
+		- 形参	定义的参数
+		- 实参	调用的参数
+		- 位置参数 
+		- 关键字参数 必须放在位置参数后面
+		- 可变参数
+			- *args
+			- **kwargs
+		- 默认参数  必须放在位置参数后面
+		- 返回值
+			- 默认返回是None
+			- 返回多个值，接受的话使用元组解包的方式
+		- 作用域
+			- 不可变的对象作为全局变量修改 使用 global
+			- 可变对象作为全局变量来修改，不需要使用 global
+			- nonlocal 声明局部变量
+		- 匿名函数
+			lambda x: x**3
+		- 高阶函数
+			- sorted() sort会改变原来列表 而sorted不会
+				li = [
+					{
+						"usrname": "zhangsan",
+						"age": 20
+					},
+					{
+						"usrname": "lisi",
+						"age": 13
+					},
+					{
+						"usrname": "wangwu",
+						"age": 20
+					},
+				]
+				from functools import cmp_to_key
+				def cmp(a, b):
+					if a["age"] > b["age"]:
+						return 1
+					elif a["age"] < b["age"]:
+						return -1
+					else:
+						if a["usrname"] > b["usrname"]:
+							return 1
+						else:
+							return -1
+				a = sorted(li, key=cmp_to_key(cmp))
+				print(a)
+                # [{'usrname': 'lisi', 'age': 13}, {'usrname': 'wangwu', 'age': 20}, {'usrname': 'zhangsan', 'age': 20}]
+            - zip
+                a = zip("abcdefg",range(10))
+                print(list(a))
+                # [('a', 0), ('b', 1), ('c', 2), ('d', 3), ('e', 4), ('f', 5), ('g', 6)]
+            - map
+                def add(a):
+                    return a**2
+                ret = map(add,range(10))
+                print(list(ret))
+                # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+            - reduce
+                from functools import reduce
+                def add(a,b):
+                    return a+b
+                ret = reduce(add,range(10))
+                print(ret)
+                # 45
+            - filter
+                def add(a):
+                    if a > 5:
+                        return True
+                ret = filter(add,range(10))
+                print(list(ret))
+                # [6, 7, 8, 9]
+            - partial
+                from functools import partial
+                def add(a, b):
+                    print(a)
+                    return a + b
+                add = partial(add, a=2, b=3)
+                print(add())
+                # 2 5
+13. 文件操作
+     - 流程
+        fp = open("test.txt","w+",encoding="utf-8")
+        fp.read()
+        fp.write("ssss")
+        fp.close()
+    - 文件模式
+        - w
+        - r
+        - wb
+        - rb
+        - a
+        - r+
+            具有读的基因 在读的基础上增加了写的功能，它会把文件指针放在文件的头部，写入数据会覆盖掉原来的数据 
+        - w+
+            具有写的基因 w+ 读写的话 它会删除原来的文件，创建一个同名的文件进行读写操作 读的话是个空文件 永远读不到 写的话会在新的文件中写入数据
+    - 读取文件的三种方式
+        - read()
+        - readline()
+        - readlines()
+    - 遍历文件使用fp对象直接遍历
+    - 文件定位
+        - tell()
+        - seek(offset,whence)
+            - 0 从文件开头偏移
+            - 1 从当前文件偏移
+            - 2 从文件末尾偏移
+            ps:whence =1和2 时 offset只能为0
+    - with 语句操作文件
+14. 面向对象
+    - 面向过程 面向对象的区别
+        - 面向过程
+            是按照完成事务的先后顺序分步进行编码
+        - 面向对象
+            通过对事务的抽象，将应用里面的事务抽象成类的形式，将事务的属性和方法封装在类中，调用类的属性和方法来组织代码
+    - 类和对象
+        - 类 
+            是对物体的抽象
+        - 对象
+            类的实例
+        
+    -  类的定义
+        class Persion():
+            name = "ssss"
+            age = 22
+            def __init__(self,name,age)
+                self.name = name
+                self.age = age
+    - 类的特性
+        - 封装
+            属性和方法定义成私有的，封装起来就是封装
+        - 继承
+            多继承，MRO，可以指定基类，然后继承基类，天然拥有基类的属性和方法
+            子类不能继承父类的私有属性和方法
+        - 多态
+            鸭子模型，关注对象的方法，不关心对象的类型
+    - 类成员
+        - 类属性
+        - 类方法
+        - 实例属性
+        - 实例方法
+        - 静态方法
+    - 访问限制
+        - _     受保护的
+        - __    私有的
+        - _Persion.__age 强制访问
+        - __xx__魔法方法
+    - 构造函数
+        __init__
+        __new__
+    - 析构函数
+        __del__ 对象即将被销毁的时候被调用的函数
+    - 引用计数
+        引用计数为0 内存会被释放
+        sys.getrefcount() # 查看引用计数  默认的话引用计数+1 调用这个函数也要使用引用计数
+    - 新式类和旧式类
+        在python3中的类都是新式类，python2默认是旧式类，显式的继承object就是新式类
+        新式类 type()  类型是类名
+        旧式类 type()  类型是instance
+    
+    
+    接继承的内容
+15. 异常处理
+16. 生成器
+17. 装饰器 闭包
+18. 元类
+19. 内存管理
+20. 垃圾回收
+21. 魔术方法
+22. 多进程
+23. 多线程
+    - 同步锁
+        多个线程对全局变量进行修改的时候，会导致数据不安全，引入了同步锁的概念，在修改数据的时候加上一把锁，修改完了将锁释放掉
+        这样数据就可以安全的修改
+        实例代码：
+        # 导入相关的包
+        import threading 
+        import time 
+        # 定义一个全局变量
+        num = 100
+
+        # 定义一个锁
+        lock = threading.Lock()
+        # 定义一个任务
+        def task():
+            global num
+            lock.acquire()
+            num2 = num 
+            time.sleep(0.001)
+            num = num2-1
+            lock.release()
+            
+        # 开启100个线程
+        print("开始任务时间是%s"% time.ctime())
+        thread_list = []
+        for i in range(100):
+            t = threading.Thread(target=task)
+            t.start()
+            thread_list.append(t)
+        for i in thread_list:
+            t.join()
+
+        print("结束任务时间是%s"% time.ctime())
+        print(num)
+    - 死锁
+        在python中 线程间共享多个资源时候，如果两个线程分别占有一部分资源并且同时等待对方的资源，这就造成了死锁，
+        一个线程需要另一个资源的释放才能进行下去，结果是两个线程都没办法继续下去，这就是死锁
+        解决的方法是用递归锁
+        死锁的示例代码：
+        import threading
+        import time
+
+        apple_lock = threading.Lock()
+        banana_lock = threading.Lock()
+
+
+        class Task(threading.Thread):
+
+            def __init__(self):
+                super(Task, self).__init__()
+
+            def run(self):
+                self.func1()
+                self.func2()
+
+            def func1(self):
+                apple_lock.acquire()
+                print("线程 %s 想拿苹果" % self.name)
+                banana_lock.acquire()
+                print("线程 %s 想拿香蕉" % self.name)
+                apple_lock.release()
+                banana_lock.release()
+
+            def func2(self):
+                banana_lock.acquire()
+                print("线程 %s 想拿香蕉" % self.name)
+                apple_lock.acquire()
+                print("线程 %s 想拿苹果" % self.name)
+                time.sleep(0.1)
+                apple_lock.release()
+                banana_lock.release()
+
+
+        if __name__ == "__main__":
+            for i in range(10):
+                Task().start()
+    - 递归锁
+        为了支持在同一线程中多次请求同一资源，python提供了"递归锁"：threading.RLock。RLock内部维护着一个Lock和一个counter变量，
+        counter记录了acquire的次数，从而使得资源可以被多次acquire。直到一个线程所有的acquire都被release，其他的线程才能获得资源。
+        示例代码：
+            import threading
+            import time
+
+            lock = threading.RLock()
+
+
+
+            class Task(threading.Thread):
+
+                def __init__(self):
+                    super(Task, self).__init__()
+
+                def run(self):
+                    self.func1()
+                    self.func2()
+
+                def func1(self):
+                    lock.acquire()
+                    print("线程 %s 想拿苹果" % self.name)
+                    lock.acquire()
+                    print("线程 %s 想拿香蕉" % self.name)
+                    lock.release()
+                    lock.release()
+
+                def func2(self):
+                    lock.acquire()
+                    print("线程 %s 想拿香蕉" % self.name)
+                    lock.acquire()
+                    print("线程 %s 想拿苹果" % self.name)
+                    time.sleep(0.1)
+                    lock.release()
+                    lock.release()
+
+
+            if __name__ == "__main__":
+                for i in range(10):
+                    Task().start()
+
+        上面我们用一把递归锁，就解决了多个同步锁导致的死锁问题。大家可以把RLock理解为大锁中还有小锁，
+        只有等到内部所有的小锁，都没有了，其他的线程才能进入这个公共资源。
+24. 多协程
+25. 正则表达式
+
+ 
+	
